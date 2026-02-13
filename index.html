@@ -77,6 +77,19 @@
             
             // 尝试播放音乐（处理浏览器自动播放限制）
             const bgMusic = document.getElementById('bgMusic');
+            let musicPlayed = false;
+            
+            // 播放音乐函数
+            function playMusic() {
+                if (!musicPlayed) {
+                    bgMusic.play().catch(err => {
+                        console.log('音乐播放失败:', err);
+                    });
+                    musicPlayed = true;
+                }
+            }
+            
+            // 初始尝试自动播放
             bgMusic.play().catch(err => {
                 console.log('音乐自动播放失败:', err);
             });
@@ -557,10 +570,12 @@
 
             // 手机端触控优化：支持点击/触摸，防误触
             btn.addEventListener('click', () => {
+                playMusic();
                 fire();
             });
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                playMusic();
                 fire();
             });
 
@@ -569,6 +584,9 @@
                 const rect = canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
+                
+                // 点击屏幕时播放音乐
+                playMusic();
                 
                 if (!isFired) {
                     fire(x, y);
@@ -583,6 +601,9 @@
                 const rect = canvas.getBoundingClientRect();
                 const x = e.touches[0].clientX - rect.left;
                 const y = e.touches[0].clientY - rect.top;
+                
+                // 触摸屏幕时播放音乐
+                playMusic();
                 
                 if (!isFired) {
                     fire(x, y);
